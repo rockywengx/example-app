@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('another')->unique();
+            $table->string('another');
             $table->integer('price')->default(0);
+            $table->string('version')->default('0.0.0');
             $table->timestamps();
         });
     }

@@ -20,7 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('book', [BookController::class, 'get']);
-Route::put('book', [BookController::class, 'edit']);
-Route::post('book', [BookController::class, 'new']);
-Route::delete('book', [BookController::class, 'deleteById']);
+Route::controller(BookController::class)->group(function () {
+    Route::get('/book/{id}', 'getById');
+    Route::get('/book', 'get');
+    Route::post('/book', 'new');
+    Route::put('/book', 'edit');
+    Route::delete('/book', 'delete');
+});

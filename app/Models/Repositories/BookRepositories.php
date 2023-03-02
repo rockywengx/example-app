@@ -18,11 +18,10 @@ class BookRepositories extends Model
     {
         return $this->book->get();
     }
-
     
     public function getById($id)
     {
-        return $this->book->where('id', $id)->get();
+        return $this->book->where('id', $id)->first();
     }
 
     public function getByName($name)
@@ -38,8 +37,8 @@ class BookRepositories extends Model
         return $this->book->where('id', $data['id'])->update($data);
     }
 
-    public function deleteById($data){
-        return $this->book->where('id', $data['id'])->delete();
+    public function deleteById($id){
+        return $this->book->where('id', $id)->delete();
     }
 }
 

@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Repositories\BookRepositories;
+use App\Services\BookServices;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +17,9 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
 
+        $this->app->scoped(BookServices::class, function (Application $app) {
+            return new BookServices($app->make(BookRepositories::class));
+        });
     }
 
     /**
