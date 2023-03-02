@@ -7,25 +7,24 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
 /**
-     * @OA\Info(
-     *      version="1.0.0",
-     *      title="Laravel OpenApi Demo Documentation",
-     *      description="L5 Swagger OpenApi description",
-     *      @OA\Contact(
-     *          email="admin@admin.com"
-     *      ),
-     *      @OA\License(
-     *          name="Apache 2.0",
-     *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
-     *      )
-     * )
-
-     *
-     * @OA\Tag(
-     *     name="Projects",
-     *     description="API Endpoints of Projects"
-     * )
-    */
+ * @OA\OpenApi(
+ *  @OA\Info(
+ *      title="Swagger-doc Services API",
+ *      version="1.0.0",
+ *      description="Swagger Service App",
+ *      @OA\Contact(
+ *          email="your-email@gmail.com"
+ *      )
+ *  ),
+ *  @OA\Server(
+ *      description="Swagger-doc App API",
+ *      url="https:/localhost/api/document"
+ *  ),
+ *  @OA\PathItem(
+ *      path="/"
+ *  )
+ * )
+ */
 
 class Controller extends BaseController
 {
