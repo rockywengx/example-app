@@ -1,0 +1,54 @@
+version: '3.3'
+
+services:
+#   phpapache:
+#     build: ./php
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#     depends_on:
+#       - mysql
+#     volumes:
+#       - ./www:/var/www/html
+#     networks:
+#       - mynetwork
+  mysql:
+    container_name: mysql
+    build: ./database
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    networks:
+      - mynetwork
+
+  phpapi:
+    container_name: phpapi
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    networks:
+      - mynetwork
+  phpmyadmin:
+    container_name: sqladmin
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+

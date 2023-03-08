@@ -1,0 +1,15 @@
+<?php
+
+$host = 'mysql';
+$port = '3306';
+$user = 'root';
+$pass = '';
+$db = '';
+$database = "laravel";
+$conn = new mysqli($host, $user, $pass, $db, $port, $database);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+echo "MySql Connected successfully";

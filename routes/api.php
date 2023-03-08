@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\PositionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookController;
+use App\Library\Http\Controllers\Middleware\DBTransaction;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +21,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::controller(BookController::class)->group(function () {
-    Route::get('/book/{id}', 'getById');
-    Route::get('/book', 'get');
-    Route::post('/book', 'new');
-    Route::put('/book', 'edit');
-    Route::delete('/book', 'delete');
+Route::controller(PositionController::class)->group(function () {
+    Route::get('/position/{id}', 'find');
+    Route::get('/position', 'get');
+    //add transation
+    Route::group(['middleware' => DBTransaction::class], function () {
+        // Your routes here
+        Route::post('/position', 'new');
+        Route::put('/position', 'edit');
+        Route::delete('/position', 'delete');
+    });
 });
+
+
