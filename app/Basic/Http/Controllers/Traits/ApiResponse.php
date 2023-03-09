@@ -1,5 +1,5 @@
 <?php
-namespace App\Library\Http\Controllers\Traits;
+namespace App\Basic\Http\Controllers\Traits;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 
 trait ApiResponse

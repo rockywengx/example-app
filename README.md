@@ -39,6 +39,12 @@ Vite
     sudo curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ```
 
+# 首次運行
+```
+    //安裝相關套件
+    composer update
+```
+
 # 運行
 ```
     //命令提示字元

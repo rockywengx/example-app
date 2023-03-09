@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Library\Tests\Feature;
+namespace App\Basic\Tests\Feature;
 
-use App\Library\Services\Service;
+use App\Basic\Services\Service;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -85,6 +85,8 @@ abstract class TestService extends TestCase
     {
         $data = $this->service()->show();
         $this->assertNotEmpty($data);
+        $this->assertNotCount(0, $data->items());
+        $this->assertNotEmpty($data->currentPage());
     }
 
 

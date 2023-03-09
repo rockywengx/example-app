@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Library\Services;
+namespace App\Basic\Services;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Summary of ServiceInterface
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 interface ServiceInterface{
     function validateArray():array;
     function judgeArray():array;
-    function show(): Collection;
+    function show(): LengthAwarePaginator;
     function find(int $id):array;
     /**
      * Summary of store

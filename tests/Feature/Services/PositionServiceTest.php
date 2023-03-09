@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Services;
 
-use App\Library\Tests\Feature\TestService;
+use App\Basic\Tests\Feature\TestService;
 use App\Models\Entities\Position;
 use App\Services\PositionService;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +23,7 @@ class PositionServiceTest extends TestService
 	 * Summary of service
 	 * @return \App\Library\Services\Service
 	 */
-	public function service(): \App\Library\Services\Service {
+	public function service(): \App\Basic\Services\Service {
         return $this->service;
 	}
 

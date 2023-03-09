@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Library\Tests\Feature;
+namespace App\Basic\Tests\Feature;
 
 use Tests\TestCase;
 
@@ -28,11 +28,12 @@ abstract class TestController extends TestCase
     {
         $route = $this->route();
         if(isset($this->testArray)){
-            $route = $route . $this->testArray['id'];
+            $route = $route . '/' . $this->testArray['id'];
         } else {
+            $route = $route . '/' . '2';
         }
 
-        $response = $this->get($this->route());
+        $response = $this->get($route);
 
         $response->assertStatus(200);
     }

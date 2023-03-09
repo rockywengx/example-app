@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Repositories\UserRepository;
-use App\Library\Services\Service;
+use App\Basic\Services\Service;
 use Illuminate\Validation\Rule;
 
 class UserService extends Service{

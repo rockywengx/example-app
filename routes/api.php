@@ -3,7 +3,7 @@
 use App\Http\Controllers\PositionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Library\Http\Controllers\Middleware\DBTransaction;
+use App\Basic\Http\Controllers\Middleware\DBTransaction;
 
 
 /*

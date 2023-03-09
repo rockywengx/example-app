@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Library\Services;
+namespace App\Basic\Services;
 
-use App\Library\Models\Repositories\Repository;
-use App\Library\Services\ServiceInterface;
+use App\Basic\Models\Repositories\Repository;
+use App\Basic\Services\ServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Summary of Service
@@ -48,24 +49,38 @@ abstract class Service implements ServiceInterface{
         $this->judges = $this->judgeArray();
     }
 
+
     /**
      * Summary of show
-     * @param mixed $id
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param array $columns
+     * @param int $page
+     * @param int $perPage
+     * @return LengthAwarePaginator
      */
-    public function show(): Collection{
-        $result = $this->repo->get();
+    public function show(array $columns = [], int $page = 1, int $perPage = 50): LengthAwarePaginator
+    {
+        $result = $this->repo->paginate($columns, $page, $perPage );
         return $result;
     }
 
-
-
-    public function find($id): array{
+    /**
+     * Summary of find
+     * @param mixed $id
+     * @return array
+     */
+    public function find($id): array
+    {
         $result = $this->repo->getById($id);
         return $result->toArray();
     }
 
 
+    /**
+     * Summary of findFirst
+     * @param string|null $modelField
+     * @param mixed|null $value
+     * @return array
+     */
     public function findFirst(string| null $modelField = null, mixed $value = null): array{
         $result = $this->repo->getFirst($modelField, $value);
         return $result->toArray();

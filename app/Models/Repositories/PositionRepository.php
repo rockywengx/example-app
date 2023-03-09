@@ -3,7 +3,7 @@
 namespace App\Models\Repositories;
 
 use App\Models\Entities\Position;
-use App\Library\Models\Repositories\Repository;
+use App\Basic\Models\Repositories\Repository;
 
 class PositionRepository extends Repository
 {
@@ -13,5 +13,8 @@ class PositionRepository extends Repository
 	public function model(): string {
         return Position::class;
 	}
+
+
+
 }
 

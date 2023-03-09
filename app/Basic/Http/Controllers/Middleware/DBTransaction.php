@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Library\Http\Controllers\Middleware;
+namespace App\Basic\Http\Controllers\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\DB;

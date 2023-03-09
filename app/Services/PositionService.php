@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Repositories\PositionRepository;
-use App\Library\Services\Service;
+use App\Basic\Services\Service;
 
 class PositionService extends Service{
 

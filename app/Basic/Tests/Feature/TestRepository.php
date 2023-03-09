@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Library\Tests\Feature;
+namespace App\Basic\Tests\Feature;
 
-use App\Library\Models\Repositories\Repository;
+use App\Basic\Models\Repositories\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 use Exception;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Summary of TestService
@@ -128,6 +129,13 @@ abstract class TestRepository extends TestCase
         } catch(Exception $e){
             $this->assertTrue(false);
         }
+    }
+
+    public function testPaginate() : void
+    {
+        $data = $this->repository()->paginate();
+        $this->assertNotCount(0, $data->items());
+        $this->assertNotEmpty($data->currentPage());
     }
 
 }

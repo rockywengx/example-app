@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Library\Models\Repositories;
+namespace App\Basic\Models\Repositories;
 
-use App\Library\Models\Repositories\RepositoryInterface;
+use App\Basic\Models\Repositories\RepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Summary of Repository
@@ -45,8 +46,14 @@ abstract class Repository implements RepositoryInterface {
      * @param int $id
      * @return Model
      */
-    public function getByIdW(int $id): Model{
+    public function getByIdW(int $id): Model
+    {
         return $this->model->where('id',$id)->first();
+    }
+
+    public function count(string $modelField = null, mixed $value = null): int
+    {
+        return $this->model->count($modelField, $value);
     }
 
     /**
@@ -54,11 +61,12 @@ abstract class Repository implements RepositoryInterface {
      * @param array $list
      * @return Collection
      */
-    public function get(array $list = []): Collection{
-        if(count($list) == 0){
+    public function get(array $columns = []): Collection
+    {
+        if(count($columns) == 0){
             return $this->model->all();
         }
-        return $this->model->all($list);
+        return $this->model->all($columns);
     }
 
     /**
@@ -67,7 +75,8 @@ abstract class Repository implements RepositoryInterface {
      * @param object $value
      * @return Model
      */
-    public function getFirst(string| null $modelField = null, mixed $value = null): Model{
+    public function getFirst(string $modelField = null, mixed $value = null): Model
+    {
         if(!is_null($modelField)){
             return $this->model->where($modelField,$value)->first();
         }
@@ -81,7 +90,8 @@ abstract class Repository implements RepositoryInterface {
      * @param object $value
      * @return Model
      */
-    public function getByField(string $modelField,object $value): Model{
+    public function getByField(string $modelField, mixed $value): Model
+    {
         return $this->model->where($modelField,$value)->get();
     }
 
@@ -89,7 +99,8 @@ abstract class Repository implements RepositoryInterface {
      * Summary of getlast
      * @return Model
      */
-    public function getlast(): Model{
+    public function getlast(): Model
+    {
         return $this->model->latest('id')->first();
     }
 
@@ -98,7 +109,8 @@ abstract class Repository implements RepositoryInterface {
      * @param array $data
      * @return Model
      */
-    public function create(array $data): Model {
+    public function create(array $data): Model
+    {
         return $this->model->create($data);
     }
 
@@ -108,7 +120,8 @@ abstract class Repository implements RepositoryInterface {
      * @param array $data
      * @return Model
      */
-    public function update(int $id,array $data): Model {
+    public function update(int $id,array $data): Model
+    {
         $model = $this->model->findOrFail($id);
         $model->update($data);
         return $model;
@@ -119,7 +132,8 @@ abstract class Repository implements RepositoryInterface {
      * @param int $id
      * @return bool
      */
-    public function delete(int $id): bool{
+    public function delete(int $id): bool
+    {
         return $this->model->findOrFail($id)->delete();
     }
 
@@ -129,7 +143,8 @@ abstract class Repository implements RepositoryInterface {
      * @param string $name
      * @return bool
      */
-    public function judgeRepeat(string $modelField,string $name): bool{
+    public function judgeRepeat(string $modelField,string $name): bool
+    {
         $judege = $this->model->where($modelField,$name)->first();
         return is_null($judege);
     }
@@ -141,7 +156,8 @@ abstract class Repository implements RepositoryInterface {
      * @param int $id
      * @return bool
      */
-    public function judgeUpdateRepeat(string $modelField,string $name,int $id): bool{
+    public function judgeUpdateRepeat(string $modelField,string $name,int $id): bool
+    {
         $judege = $this->model->where($modelField,$name)->where('id','!=',$id)->first();
         return is_null($judege);
     }
@@ -152,7 +168,8 @@ abstract class Repository implements RepositoryInterface {
      * @param mixed $id
      * @return bool
      */
-    public function judgeRepeatBatch(array $judgeArray,$id): bool{
+    public function judgeRepeatBatch(array $judgeArray,$id): bool
+    {
         $model = (is_null($id))?$this->model:$this->model->where('id','!=',$id);
         $model = $model->where(function($query) use ($judgeArray){
             foreach($judgeArray as $index=>$item){
@@ -196,6 +213,24 @@ abstract class Repository implements RepositoryInterface {
             ->where($modelField,$name)
             ->first();
         return is_null($judege);
+    }
+
+    public function paginate(array $columns = [], int $page = 1, int $perPage = 50): LengthAwarePaginator
+    {
+        $skip = ($page - 1) * $perPage; // 要跳過的紀錄數量
+
+        if(count($columns) == 0){
+            $builder = $this->model->select();
+        } else {
+            $builder = $this->model->select($columns);
+        }
+        if($skip> 0){
+            $data = $builder->skip($skip)->paginate($perPage);
+        } else {
+            $data = $builder->paginate($perPage);
+        }
+
+        return $data;
     }
 
 }

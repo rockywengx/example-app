@@ -4,7 +4,7 @@ namespace Tests\Feature\Controllers;
 
 use App\Http\Controllers\PositionController;
 use App\Models\Entities\Position;
-use App\Library\Tests\Feature\TestController;
+use App\Basic\Tests\Feature\TestController;
 
 class PositionControllerTest extends TestController
 {

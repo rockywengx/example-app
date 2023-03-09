@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Library\Tests\Feature\TestRepository;
+use App\Basic\Tests\Feature\TestRepository;
 use App\Models\Entities\Position;
 use App\Models\Repositories\PositionRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -21,9 +21,9 @@ class PositionRepositoryTest extends TestRepository
 
 	/**
 	 * Summary of service
-	 * @return \App\Library\Models\Repositories\Repository
+	 * @return \App\Basic\Models\Repositories\Repository
 	 */
-	public function repository(): \App\Library\Models\Repositories\Repository {
+	public function repository(): \App\Basic\Models\Repositories\Repository {
         return $this->repo;
 	}
 
@@ -46,6 +46,8 @@ class PositionRepositoryTest extends TestRepository
         }
         return $fakeData;
 	}
+
+
 }
 
 

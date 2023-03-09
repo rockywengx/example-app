@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Library\Http\Controllers\Traits\ApiResponse;
+use App\Basic\Http\Controllers\Traits\ApiResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
