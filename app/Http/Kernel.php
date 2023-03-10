@@ -22,7 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         // 全域加入log
-        \App\Http\Middleware\LogRequests::class,
+        \App\Basic\Http\Controllers\Middleware\LogRequests::class,
     ];
 
     /**

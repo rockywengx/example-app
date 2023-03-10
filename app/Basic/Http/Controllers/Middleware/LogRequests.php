@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Basic\Http\Controllers\Middleware;
+
 use Closure;
 use Illuminate\Support\Facades\Log;
 
