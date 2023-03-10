@@ -52,8 +52,10 @@ abstract class TestKeyRepository extends TestCase
         $data = $this->repository()->create($post->toArray());
         $this->assertNotEmpty($data);
         $this->testModel = $data;
-        $id = $this->testModel->id;
-        $this->assertNotEmpty($id);
+        $keyValues = $this->repository()->getKeyValues($this->testModel->toArray());
+        $this->assertEmpty(array_filter($keyValues, function($value) {
+            return empty($value);
+        }));
     }
 
     public function testGet(): void
@@ -78,7 +80,7 @@ abstract class TestKeyRepository extends TestCase
         }
 
         // 檢查任一key不可為空值
-        $this->assertTrue(array_filter($keyValues, function($value) {
+        $this->assertEmpty(array_filter($keyValues, function($value) {
             return empty($value);
         }));
 
@@ -102,7 +104,7 @@ abstract class TestKeyRepository extends TestCase
         $keyValues = $this->repository()->getKeyValues($this->testModel->toArray());
 
         // 檢查任一key不可為空值
-        $this->assertTrue(array_filter($keyValues, function($value) {
+        $this->assertEmpty(array_filter($keyValues, function($value) {
             return empty($value);
         }));
 
@@ -126,7 +128,7 @@ abstract class TestKeyRepository extends TestCase
         $keyValues = $this->repository()->getKeyValues($this->testModel->toArray());
 
         // 檢查任一key不可為空值
-        $this->assertTrue(array_filter($keyValues, function($value) {
+        $this->assertEmpty(array_filter($keyValues, function($value) {
             return empty($value);
         }));
 

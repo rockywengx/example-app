@@ -17,13 +17,11 @@ class CodeFactory extends Factory
      */
     public function definition(): array
     {
-
-        fake()->randomAscii();
-
         return [
             'name' => fake()->name(),
             'key' => fake()->text(10),
             'value' => fake()->randomNumber(),
+            'value2' => fake()->text(16),
             'disabled' => false,
         ];
     }

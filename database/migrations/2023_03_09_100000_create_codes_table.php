@@ -17,7 +17,7 @@ class CreateCodesTable extends Migration
             $table->string('name')->index();
             $table->string('key');
             $table->string('value');
-            $table->string('value2');
+            $table->string('value2')->nullable();
             $table->boolean('disabled')->default(false);
             $table->primary(['name', 'key', 'value']);
             $table->timestamps();

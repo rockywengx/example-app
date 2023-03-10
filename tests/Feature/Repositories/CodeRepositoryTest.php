@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Repositories;
 
-use App\Basic\Tests\Feature\TestRepository;
-use App\Models\Entities\Position;
+use App\Basic\Models\Repositories\KeyRepository;
+use App\Basic\Tests\Feature\TestKeyRepository;
+use App\Models\Entities\Code;
 use App\Models\Repositories\CodeRepository;
 use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 
-class CodeRepositoryTest extends TestRepository
+class CodeRepositoryTest extends TestKeyRepository
 {
     protected CodeRepository $repo;
 
@@ -21,9 +22,9 @@ class CodeRepositoryTest extends TestRepository
 
 	/**
 	 * Summary of service
-	 * @return \App\Basic\Models\Repositories\Repository
+	 * @return \App\Basic\Models\Repositories\KeyRepository
 	 */
-	public function repository(): \App\Basic\Models\Repositories\Repository {
+	public function repository(): KeyRepository {
         return $this->repo;
 	}
 
@@ -31,14 +32,14 @@ class CodeRepositoryTest extends TestRepository
 	 * @return mixed
 	 */
 	public function insertModel(): Model {
-        return Position::factory()->makeOne();
+        return Code::factory()->makeOne();
 	}
 
 	/**
 	 * @return mixed
 	 */
 	public function updateModel(Model $source = null) : Model{
-        $fakeData = Position::factory()->makeOne();
+        $fakeData = Code::factory()->makeOne();
 
         if(is_null($source)){
         } else {

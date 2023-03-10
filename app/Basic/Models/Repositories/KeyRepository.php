@@ -33,14 +33,16 @@ abstract class KeyRepository implements KeyRepositoryInterface
 	 */
 	abstract public function getKeys(): array;
 
+    abstract public function model(): string;
+
     /**
      * Summary of __construct
      * @param Model $model
      * @param array $keys
      */
-    public function __construct(Model $model)
+    public function __construct()
     {
-        $this->model = $model;
+        $this->model = app($this->model());
         $this->keys = $this->getKeys();
     }
 
@@ -177,6 +179,7 @@ abstract class KeyRepository implements KeyRepositoryInterface
      */
     public function getlast(): Model
     {
+        // fixe me
         return $this->model->latest('id')->first();
     }
 
