@@ -68,6 +68,8 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
+            //每天建立一個log file
+            'rotate' => 'daily.0',
         ],
 
         'slack' => [

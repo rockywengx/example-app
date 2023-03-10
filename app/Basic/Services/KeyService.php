@@ -2,7 +2,7 @@
 
 namespace App\Basic\Services;
 
-use App\Basic\Models\Repositories\Repository;
+use App\Basic\Models\Repositories\KeyRepository;
 use App\Basic\Services\ServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -11,13 +11,13 @@ use Illuminate\Pagination\LengthAwarePaginator;
 /**
  * Summary of Service
  */
-abstract class Service implements ServiceInterface
+abstract class KeyService implements KeyServiceInterface
 {
     /**
      * Summary of repo
      * @var
      */
-    protected Repository $repo;
+    protected KeyRepository $repo;
     /**
      * Summary of validate
      * @var
@@ -42,9 +42,9 @@ abstract class Service implements ServiceInterface
 
     /**
      * Summary of __construct
-     * @param Repository $repository
+     * @param KeyRepository $repository
      */
-    public function __construct(Repository $repository)
+    public function __construct(KeyRepository $repository)
     {
         $this->repo = $repository;
         $this->validate = $this->validateArray();
@@ -67,12 +67,12 @@ abstract class Service implements ServiceInterface
 
     /**
      * Summary of find
-     * @param mixed $id
+     * @param array $keyValues
      * @return array
      */
-    public function find($id): array
+    public function find(array $keyValues): array
     {
-        $result = $this->repo->getById($id);
+        $result = $this->repo->getBykeys($keyValues);
         return $result->toArray();
     }
 
@@ -99,37 +99,37 @@ abstract class Service implements ServiceInterface
     {
         $val = $data->validate($this->validate);
         $result = $this->repo->create($val);
-        // recordStore那來的不知道
-        // $result->recordStore();
         return $result->toArray();
     }
 
     /**
      * Summary of edit
-     * @param int $id
+     * @param array $keyValues
      * @param Request $data
      * @return array<string>
      */
-    public function edit(int $id, Request $data): array
+    public function edit(array $keyValues, Request $data): array
     {
-        foreach ($this->judges as $judge) {
-            $this->validate[$judge] .= ',' . $id;
+        $exclude = implode(',', $keyValues) . implode(',', array_keys($keyValues));
+
+        foreach($this->judges as $judge){
+            $this->validate[$judge] .= ',' . $exclude;
         }
         $val = $data->validate($this->validate);
-        $this->repo->update($id, $val);
-        $material = $this->repo->getById($id);
-        // $material->recordEdit();
+        $material = $this->repo->getByKeys($keyValues);
+        $this->repo->updateByKey($keyValues, $val);
+
         return $material->toArray();
     }
 
     /**
      * Summary of remove
-     * @param mixed $id
+     * @param array
      * @return void
      */
-    public function remove(int $id): bool
+    public function remove(array $keyValues): bool
     {
-        return $this->repo->delete($id);
+        return $this->repo->deleteByKey($keyValues);
     }
 
 }

@@ -21,7 +21,7 @@ class PositionServiceTest extends TestService
 
 	/**
 	 * Summary of service
-	 * @return \App\Library\Services\Service
+	 * @return \App\Basic\Services\Service
 	 */
 	public function service(): \App\Basic\Services\Service {
         return $this->service;

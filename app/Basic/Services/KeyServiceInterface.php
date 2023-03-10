@@ -2,25 +2,28 @@
 
 namespace App\Basic\Services;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 
 /**
- * Summary of ServiceInterface
+ * Summary of MultiKeyServiceInterface
  */
-interface ServiceInterface
+interface KeyServiceInterface
 {
     function validateArray(): array;
     function judgeArray(): array;
+    /**
+     * Summary of show
+     * @return LengthAwarePaginator
+     */
     function show(): LengthAwarePaginator;
-    function find(int $id): array;
+    function find(array $keyValues): array;
     /**
      * Summary of store
      * @param Request $data
      * @return array
      */
     function store(Request $data): array;
-    function edit(int $id, Request $data): array;
-    function remove(int $id): bool;
+    function edit(array $keyValues, Request $data): array;
+    function remove(array $keyValues): bool;
 }

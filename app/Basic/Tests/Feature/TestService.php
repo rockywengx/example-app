@@ -38,10 +38,10 @@ abstract class TestService extends TestCase
         $request = Request::create('', 'POST', $post->toArray());
 
         $data = $this->service()->store($request);
+
         $this->assertNotEmpty($data);
         $this->testModel = $data;
     }
-
 
 
     public function testFind()

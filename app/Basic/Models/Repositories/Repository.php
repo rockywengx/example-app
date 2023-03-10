@@ -11,7 +11,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 /**
  * Summary of Repository
  */
-abstract class Repository implements RepositoryInterface {
+abstract class Repository implements RepositoryInterface
+{
 
     /**
      * Summary of model
@@ -28,7 +29,8 @@ abstract class Repository implements RepositoryInterface {
     /**
      * Summary of __construct
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->model = app($this->model());
     }
 
@@ -37,7 +39,8 @@ abstract class Repository implements RepositoryInterface {
      * @param int $id
      * @return Model
      */
-    public function getById(int $id): Model{
+    public function getById(int $id): Model
+    {
         return $this->model->findOrFail($id);
     }
 
@@ -48,7 +51,7 @@ abstract class Repository implements RepositoryInterface {
      */
     public function getByIdW(int $id): Model
     {
-        return $this->model->where('id',$id)->first();
+        return $this->model->where('id', $id)->first();
     }
 
     public function count(string $modelField = null, mixed $value = null): int
@@ -63,7 +66,7 @@ abstract class Repository implements RepositoryInterface {
      */
     public function get(array $columns = []): Collection
     {
-        if(count($columns) == 0){
+        if (count($columns) == 0) {
             return $this->model->all();
         }
         return $this->model->all($columns);
@@ -77,8 +80,8 @@ abstract class Repository implements RepositoryInterface {
      */
     public function getFirst(string $modelField = null, mixed $value = null): Model
     {
-        if(!is_null($modelField)){
-            return $this->model->where($modelField,$value)->first();
+        if (!is_null($modelField)) {
+            return $this->model->where($modelField, $value)->first();
         }
         return $this->model->first();
     }
@@ -92,7 +95,7 @@ abstract class Repository implements RepositoryInterface {
      */
     public function getByField(string $modelField, mixed $value): Model
     {
-        return $this->model->where($modelField,$value)->get();
+        return $this->model->where($modelField, $value)->get();
     }
 
     /**
@@ -120,7 +123,7 @@ abstract class Repository implements RepositoryInterface {
      * @param array $data
      * @return Model
      */
-    public function update(int $id,array $data): Model
+    public function update(int $id, array $data): Model
     {
         $model = $this->model->findOrFail($id);
         $model->update($data);
@@ -143,9 +146,9 @@ abstract class Repository implements RepositoryInterface {
      * @param string $name
      * @return bool
      */
-    public function judgeRepeat(string $modelField,string $name): bool
+    public function judgeRepeat(string $modelField, string $name): bool
     {
-        $judege = $this->model->where($modelField,$name)->first();
+        $judege = $this->model->where($modelField, $name)->first();
         return is_null($judege);
     }
 
@@ -156,9 +159,12 @@ abstract class Repository implements RepositoryInterface {
      * @param int $id
      * @return bool
      */
-    public function judgeUpdateRepeat(string $modelField,string $name,int $id): bool
+    public function judgeUpdateRepeat(string $modelField, string $name, int $id): bool
     {
-        $judege = $this->model->where($modelField,$name)->where('id','!=',$id)->first();
+        $judege = $this->model
+            ->where($modelField, $name)
+            ->where('id', '!=', $id)
+            ->first();
         return is_null($judege);
     }
 
@@ -168,15 +174,15 @@ abstract class Repository implements RepositoryInterface {
      * @param mixed $id
      * @return bool
      */
-    public function judgeRepeatBatch(array $judgeArray,$id): bool
+    public function judgeRepeatBatch(array $judgeArray, $id): bool
     {
-        $model = (is_null($id))?$this->model:$this->model->where('id','!=',$id);
-        $model = $model->where(function($query) use ($judgeArray){
-            foreach($judgeArray as $index=>$item){
-                if($index == 0){
-                    $query->where($item[0],$item[1]);
-                }else{
-                    $query->orWhere($item[0],$item[1]);
+        $model = (is_null($id)) ? $this->model : $this->model->where('id', '!=', $id);
+        $model = $model->where(function ($query) use ($judgeArray) {
+            foreach ($judgeArray as $index => $item) {
+                if ($index == 0) {
+                    $query->where($item[0], $item[1]);
+                } else {
+                    $query->orWhere($item[0], $item[1]);
                 }
             }
         });
@@ -190,10 +196,11 @@ abstract class Repository implements RepositoryInterface {
      * @param string $name
      * @return bool
      */
-    public function judgeStoreAlong(string $storeBranchId,string $modelField,string $name): bool{
+    public function judgeStoreAlong(string $storeBranchId, string $modelField, string $name): bool
+    {
         $judege = $this->model
-            ->where('store_branch_id',$storeBranchId)
-            ->where($modelField,$name)
+            ->where('store_branch_id', $storeBranchId)
+            ->where($modelField, $name)
             ->first();
         return is_null($judege);
     }
@@ -206,11 +213,12 @@ abstract class Repository implements RepositoryInterface {
      * @param int $id
      * @return bool
      */
-    public function judgeUpdateStoreAlong(string $storeBranchId,string $modelField,string $name,int $id): bool{
+    public function judgeUpdateStoreAlong(string $storeBranchId, string $modelField, string $name, int $id): bool
+    {
         $judege = $this->model
-            ->where('id','!=',$id)
-            ->where('store_branch_id',$storeBranchId)
-            ->where($modelField,$name)
+            ->where('id', '!=', $id)
+            ->where('store_branch_id', $storeBranchId)
+            ->where($modelField, $name)
             ->first();
         return is_null($judege);
     }
@@ -219,12 +227,12 @@ abstract class Repository implements RepositoryInterface {
     {
         $skip = ($page - 1) * $perPage; // 要跳過的紀錄數量
 
-        if(count($columns) == 0){
+        if (count($columns) == 0) {
             $builder = $this->model->select();
         } else {
             $builder = $this->model->select($columns);
         }
-        if($skip> 0){
+        if ($skip > 0) {
             $data = $builder->skip($skip)->paginate($perPage);
         } else {
             $data = $builder->paginate($perPage);
