@@ -138,7 +138,7 @@ abstract class KeyRepository implements KeyRepositoryInterface
      */
     function validateKey(array $keys): void
     {
-        $difference = array_diff($this->keys, array_values($keys));
+        $difference = array_diff($this->keys, array_keys($keys));
 
         if (empty($difference)) {
         } else {
@@ -179,8 +179,13 @@ abstract class KeyRepository implements KeyRepositoryInterface
      */
     public function getlast(): Model
     {
-        // fixe me
-        return $this->model->latest('id')->first();
+        $builder = $this->model;
+        foreach($this->getKeys() as $key)
+        {
+            $builder = $builder->latest($key);
+        }
+
+        return $builder->first();
     }
 
     /**

@@ -70,7 +70,7 @@ abstract class TestKeyRepository extends TestCase
         $this->assertNotEmpty($data);
     }
 
-    public function testGetById(): void
+    public function testGetByKeys(): void
     {
         if (isset($this->testModel)) {
             $keyValues = $this->repository()->getKeyValues($this->testModel->toArray());
