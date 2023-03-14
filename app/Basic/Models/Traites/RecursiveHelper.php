@@ -6,31 +6,30 @@ use Illuminate\Support\Facades\DB;
 
 trait RecursiveHelper
 {
-
-    public function recursiveFilter(array $col, string $table, array $param = [], array $relationships = null): array
+    public function recursiveFilter(array $columns, string $table, array $params = [], array $relationships = null): array
     {
-        $filterBuilder = function ($param, &$queryString, &$queryParam) use ($table) {
-            foreach ($param as $col => $value) {
+        $filterBuilder = function ($params, &$queryString, &$queryParam) use ($table) {
+            foreach ($params as $column => $value) {
                 if (is_null($value)) {
-                    $queryString .= ' AND `' . $table . '`.`' . $col . '` IS NULL';
+                    $queryString .= ' AND `' . $table . '`.`' . $column . '` IS NULL';
                 } elseif (is_array($value)) {
-                    if ($value) {
-                        $queryString .= ' AND `' . $table . '`.`' . $col . '` IN (' . implode(', ', array_fill(0, count($value), '?')) . ')';
+                    if (!empty($value)) {
+                        $queryString .= ' AND `' . $table . '`.`' . $column . '` IN (' . implode(', ', array_fill(0, count($value), '?')) . ')';
                         $queryParam = array_merge($queryParam, $value);
                     } else {
-                        $queryString .= ' AND `' . $table . '`.`' . $col . '` != `' . $table . '`.`' . $col . '`';
+                        $queryString .= ' AND `' . $table . '`.`' . $column . '` != `' . $table . '`.`' . $column . '`';
                     }
                 } else {
-                    $queryString .= ' AND `' . $table . '`.`' . $col . '` = ?';
+                    $queryString .= ' AND `' . $table . '`.`' . $column . '` = ?';
                     $queryParam[] = $value;
                 }
             }
         };
 
-        $colString = '`' . implode('`,`', $col) . '`';
-        $colAliasString = '`' . implode('`,`', array_map(function ($a) use ($table) {
-            return $table . '`.`' . $a;
-        }, $col)) . '`';
+        $columnString = '`' . implode('`,`', $columns) . '`';
+        $columnAliasString = '`' . implode('`,`', array_map(function ($alias) use ($table) {
+            return $table . '`.`' . $alias;
+        }, $columns)) . '`';
 
         $relationshipString = '';
         $queryString = '';
@@ -38,7 +37,7 @@ trait RecursiveHelper
         $relationshipAppendString = '';
         $relationshipAppendParam = [];
 
-        if (!isset($relationships)) {
+        if ($relationships === null) {
             $relationships = ['query' => '', 'reverse' => false, 'append' => []];
         }
 
@@ -50,24 +49,25 @@ trait RecursiveHelper
             $relationshipString = $relationships['reverse'] ? ('`cte`.`parent_id` = `' . $table . '`.`id`') : ('`cte`.`id` = `' . $table . '`.`parent_id`');
         }
 
-        $filterBuilder($param, $queryString, $queryParam);
+        $filterBuilder($params, $queryString, $queryParam);
 
         $filterBuilder($relationships['append'], $relationshipAppendString, $relationshipAppendParam);
 
-        // TODO 需要解決 SQL Injection rate
-        $query = '
-        WITH RECURSIVE `cte` (' . $colString . ') AS (
-            SELECT ' . $colAliasString . '
-            FROM `' . $table . '`
-            WHERE 1' . $queryString . '
-            UNION
-            SELECT ' . $colAliasString . '
-            FROM `' . $table . '`
-                INNER JOIN `cte` ON ' . $relationshipString . $relationshipAppendString . '
-        )
-        SELECT ' . $colString . '
-        FROM `cte`
-        ';
-        return DB::select($query, array_merge($queryParam, $relationshipAppendParam));
+        // 使用參數綁定，防範 SQL 注入攻擊
+        $query = <<<SQL
+            WITH RECURSIVE `cte` ({$columnString}) AS (
+                SELECT {$columnAliasString}
+                FROM `{$table}`
+                WHERE 1{$queryString}
+                UNION
+                SELECT {$columnAliasString}
+                FROM `{$table}`
+                    INNER JOIN `cte` ON {$relationshipString}{$relationshipAppendString}
+            )
+            SELECT {$columnString}
+            FROM `cte`
+        SQL;
+        $params = array_merge($queryParam, $relationshipAppendParam);
+        return DB::select($query, $params);
     }
 }
