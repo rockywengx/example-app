@@ -17,9 +17,9 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
 
-        $this->app->scoped(BookServices::class, function (Application $app) {
-            return new BookServices($app->make(BookRepositories::class));
-        });
+        //$this->app->scoped(BookServices::class, function (Application $app) {
+        //    return new BookServices($app->make(BookRepositories::class));
+        //});
     }
 
     /**
